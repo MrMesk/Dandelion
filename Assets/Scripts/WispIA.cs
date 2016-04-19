@@ -125,12 +125,10 @@ public class WispIA : MonoBehaviour
                 }
             }
         }
-        else
+        else if(!isLighting)
         {
             target = follow.GetFollowing(followIndex);
         }
-        
-       
     }
 
     IEnumerator Awaking()

@@ -32,7 +32,7 @@ public class Followers : MonoBehaviour
         {
             wisps[i + 1].GetComponent<WispIA>().SetTarget(wisps[i - 1].transform);
 
-            for (int j = i + 1; j < index; j++)
+            for (int j = i+1; j <= index; j++)
             {
                 wisps[j - 1] = wisps[j];
                 wisps[j - 1].GetComponent<WispIA>().SetIndex(j - 1);
@@ -48,6 +48,7 @@ public class Followers : MonoBehaviour
     }
     public Transform GetFollowing(int i)
     {
+        Debug.Log(i);
         return wisps[i - 1].transform;
     }
     public void PlayerKill()
