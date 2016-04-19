@@ -55,8 +55,7 @@ public class WispIA : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update ()
-    {
-        
+    {   
 	    if(!isNearby)
         {
             if(!isFar)
@@ -125,6 +124,10 @@ public class WispIA : MonoBehaviour
                     transform.position = Vector3.Lerp(transform.position, target.position, speed * Time.deltaTime);
                 }
             }
+        }
+        else
+        {
+            target = follow.GetFollowing(followIndex);
         }
         
        
