@@ -46,7 +46,10 @@ public class Followers : MonoBehaviour
             index--;
         }
     }
-
+    public Transform GetFollowing(int i)
+    {
+        return wisps[i - 1].transform;
+    }
     public void PlayerKill()
     {
         for(int j = 1; j <= index; j++)
