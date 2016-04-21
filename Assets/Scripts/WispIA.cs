@@ -33,6 +33,7 @@ public class WispIA : MonoBehaviour
     bool isLighting = false;
 
     Material[] materials;
+    Animator anim;
 
     Vector3 velocity;
     int followIndex;
@@ -51,6 +52,7 @@ public class WispIA : MonoBehaviour
         materials = my_Renderer.materials;
         materials[0] = mats[2];
         my_Renderer.materials = materials;
+        anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -115,6 +117,16 @@ public class WispIA : MonoBehaviour
                 if (Vector3.Distance(transform.position, target.position) > spacing)
                 {
                     transform.position = Vector3.Lerp(transform.position, target.position, speed * Time.deltaTime);
+                    if(anim.GetBool("Moving") == false)
+                    {
+                        anim.SetBool("Moving", true);
+                    }
+                    
+                }
+                else if (anim.GetBool("Moving") == true)
+                {
+                    anim.SetTrigger("Stop");
+                    anim.SetBool("Moving", false);
                 }
             }
             else
@@ -122,6 +134,18 @@ public class WispIA : MonoBehaviour
                 if (Vector3.Distance(transform.position, target.position) > 0f)
                 {
                     transform.position = Vector3.Lerp(transform.position, target.position, speed * Time.deltaTime);
+                    if (anim.GetBool("Moving") == false)
+                    {
+                        anim.SetBool("Moving", true);
+                    }
+                }
+                else
+                {
+                    if (anim.GetBool("Moving") == true)
+                    {
+                        anim.SetTrigger("Stop");
+                        anim.SetBool("Moving", false);
+                    }
                 }
             }
         }
@@ -197,8 +221,13 @@ public class WispIA : MonoBehaviour
             l.range = Mathf.Lerp(l.range, endGlow, speed * Time.deltaTime);
             yield return null;
         }
-        Destroy(target.gameObject);
+       // Destroy(target.gameObject);
         yield return new WaitForSeconds(spotTime);
+        while (l.range > 1.5f)
+        {
+            l.range = Mathf.Lerp(l.range, 0f, speed * Time.deltaTime);
+            yield return null;
+        }
         Destroy(gameObject);
     }
 }
