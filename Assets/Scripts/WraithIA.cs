@@ -8,7 +8,7 @@ public class WraithIA : MonoBehaviour
     public float nearRange;
     [Range(5f, 15f)]
     public float farRange;
-    [Range(0.5f, 5f)]
+    [Range(0.5f, 100f)]
     public float speed;
     [Range(0.5f, 2f)]
     public float wakingTime;
@@ -88,9 +88,12 @@ public class WraithIA : MonoBehaviour
 
     void Attack()
     {
+        Vector3 moveDir = target.position - transform.position;
+        moveDir = moveDir.normalized * speed * Time.deltaTime;
         if(target)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            // transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            transform.Translate(moveDir, Space.World);
         }
         else
         {
@@ -123,7 +126,7 @@ public class WraithIA : MonoBehaviour
         }
     }
 
-    void Death()
+    public void Death()
     {
         Instantiate(particleDeath, transform.position, Quaternion.identity);
         Destroy(gameObject);

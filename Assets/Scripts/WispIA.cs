@@ -193,8 +193,9 @@ public class WispIA : MonoBehaviour
 
     public void Ascend(Transform t)
     {
-       
         SetTarget(t);
+        isNearby = true;
+        isFar = true;
     }
 
     public void GoToLocation(Transform pos)

@@ -10,33 +10,53 @@ public class TreeManager : MonoBehaviour
     public float aggroRange;
     [Range(0f, 5f)]
     public float lightIncreasePerWisp;
+    [Range(0f, 5f)]
+    public float LightIncreaseSpeed;
     [Space(10)]
-    [Range(5, 10)]
-    public int step1;
     [Range(10, 20)]
-    public int step2;
+    public int step1;
     [Space(10)]
     public GameObject lightChild;
     [Space(10)]
     public GameObject particleChild;
+    [Space(10)]
+    public GameObject fog;
 
-    bool step1Reached = false;
+    ParticleSystem.ShapeModule shapeModule;
     bool step2Reached = false;
+
+    float actualAggroRange;
+    float newAggroRange;
+
+    float actualParticleRange;
+    float newParticleRange;
+
     float actualLightRange;
     int wispsAscended;
+
+    ParticleSystemShapeType shape;
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         actualLightRange = lightChild.GetComponent<Light>().range;
         wispsAscended = 0;
+
+        shapeModule = fog.GetComponent<ParticleSystem>().shape;
+
+
+        actualAggroRange = aggroRange;
+        newAggroRange = actualAggroRange;
+
+        actualParticleRange = shapeModule.radius;
+        newParticleRange = actualParticleRange;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-        NearCheck(aggroRange);
+        NearCheck(actualAggroRange);
         UpdateLight();
-	}
+    }
 
     void NearCheck(float range)
     {
@@ -46,7 +66,14 @@ public class TreeManager : MonoBehaviour
             if (c.transform.tag == "Wisp")
             {
                 c.GetComponent<WispIA>().Ascend(transform);
-                //Debug.Log("Aggro a wisp");
+            }
+            else if (c.transform.tag == "SleepingWisp")
+            {
+                c.GetComponent<WispIA>().Ascend(transform);
+            }
+            else if (c.transform.tag == "Wraith")
+            {
+                c.GetComponent<WraithIA>().Death();
             }
         }
     }
@@ -55,20 +82,25 @@ public class TreeManager : MonoBehaviour
     {
         wispsAscended++;
         SmoothLightIncrease();
-        if(wispsAscended >= step2 && !step2Reached)
+        if (wispsAscended >= step1 && !step2Reached)
         {
             step2Reached = true;
             particleChild.SetActive(true);
         }
-        
+
     }
 
     public void SmoothLightIncrease()
     {
         actualLightRange += lightIncreasePerWisp;
+        newAggroRange += lightIncreasePerWisp;
+        newParticleRange += lightIncreasePerWisp;
     }
     void UpdateLight()
     {
-        lightChild.GetComponent<Light>().range = Mathf.Lerp(lightChild.GetComponent<Light>().range, actualLightRange, 0.5f * Time.deltaTime);
+        lightChild.GetComponent<Light>().range = Mathf.Lerp(lightChild.GetComponent<Light>().range, actualLightRange, LightIncreaseSpeed * Time.deltaTime);
+        actualAggroRange = Mathf.Lerp(actualAggroRange, newAggroRange, LightIncreaseSpeed * Time.deltaTime);
+        actualParticleRange = Mathf.Lerp(actualParticleRange, newParticleRange, LightIncreaseSpeed * Time.deltaTime);
+        shapeModule.radius = actualParticleRange;
     }
 }

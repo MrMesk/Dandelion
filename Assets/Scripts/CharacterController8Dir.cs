@@ -23,15 +23,15 @@ public class CharacterController8Dir : MonoBehaviour
         dir = Vector3.zero;
         if (vAxis != 0f)
         {
-            dir += Vector3.forward * speed * vAxis * Time.deltaTime;
+            dir += Vector3.forward * vAxis;
             facingDir = dir;
         }
         if (hAxis != 0f)
         {
-            dir += Vector3.right * speed * hAxis * Time.deltaTime;
+            dir += Vector3.right * hAxis;
             facingDir = dir;
         }
-
+        dir = dir.normalized * speed * Time.deltaTime;
         rigid.velocity = dir;
         transform.forward = facingDir;
     }

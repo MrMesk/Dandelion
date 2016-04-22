@@ -61,6 +61,7 @@ public class Followers : MonoBehaviour
         for(int j = 1; j <= index; j++)
         {
             wisps[j].GetComponent<WispIA>().ClearFollowers();
+            cam.CameraZooming(-1);
         }
         index = 0;
         transform.position = spawnPoint;

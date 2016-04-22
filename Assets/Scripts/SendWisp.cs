@@ -23,7 +23,7 @@ public class SendWisp : MonoBehaviour
                 {
                     Vector3 destination = new Vector3(hit.point.x, hit.point.y + 1f, hit.point.z);
                     GameObject destinationFeedback = Instantiate(Resources.Load("Feedbacks/Destination") as GameObject, destination, Quaternion.identity) as GameObject;
-                    follow.wisps[follow.index].GetComponent<WispIA>().GoToLocation(destinationFeedback.transform);
+                    follow.wisps[1].GetComponent<WispIA>().GoToLocation(destinationFeedback.transform);
                 }
             }
         }
