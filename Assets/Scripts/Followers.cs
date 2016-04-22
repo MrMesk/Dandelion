@@ -6,9 +6,12 @@ public class Followers : MonoBehaviour
     public GameObject[] wisps;
     public Vector3 spawnPoint;
     public int index;
-	// Use this for initialization
-	void Start ()
+
+    CameraDezoom cam;
+    // Use this for initialization
+    void Start ()
     {
+        cam = GameObject.Find("Main Camera").GetComponent<CameraDezoom>();
         spawnPoint = transform.position;
         wisps = new GameObject[GameObject.FindGameObjectsWithTag("SleepingWisp").Length +1];
         wisps[0] = gameObject;
@@ -22,6 +25,7 @@ public class Followers : MonoBehaviour
             index++;
             wisps[index] = g;
             g.GetComponent<WispIA>().SetIndex(index);
+            cam.CameraZooming(1);
         }
         return wisps[index - 1].transform;
     }
@@ -45,6 +49,7 @@ public class Followers : MonoBehaviour
             wisps[index] = null;
             index--;
         }
+        cam.CameraZooming(-1);
     }
     public Transform GetFollowing(int i)
     {
