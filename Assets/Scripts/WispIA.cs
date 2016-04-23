@@ -50,7 +50,7 @@ public class WispIA : MonoBehaviour
         materials = my_Renderer.materials;
         materials[0] = mats[2];
         my_Renderer.materials = materials;
-        anim = GetComponent<Animator>();
+        anim = transform.Find("Model").GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -192,8 +192,13 @@ public class WispIA : MonoBehaviour
     public void Ascend(Transform t)
     {
         SetTarget(t);
-        isNearby = true;
-        isFar = true;
+        if(!isNearby && !isFar)
+        {
+            isNearby = true;
+            isFar = true;
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraDezoom>().CameraZooming(1);
+        }
+
     }
 
     public void GoToLocation(Transform pos)
