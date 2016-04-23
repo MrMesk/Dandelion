@@ -34,8 +34,6 @@ public class WispIA : MonoBehaviour
 
     Material[] materials;
     Animator anim;
-
-    Vector3 velocity;
     int followIndex;
     Light l;
 

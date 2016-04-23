@@ -46,7 +46,7 @@ public class Followers : MonoBehaviour
         }
         else
         {
-            wisps[index] = null;
+           // wisps[index] = null;
             index--;
         }
         cam.CameraZooming(-1);

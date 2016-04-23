@@ -88,10 +88,11 @@ public class WraithIA : MonoBehaviour
 
     void Attack()
     {
-        Vector3 moveDir = target.position - transform.position;
-        moveDir = moveDir.normalized * speed * Time.deltaTime;
+   
         if(target)
         {
+            Vector3 moveDir = target.position - transform.position;
+            moveDir = moveDir.normalized * speed * Time.deltaTime;
             // transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             transform.Translate(moveDir, Space.World);
         }

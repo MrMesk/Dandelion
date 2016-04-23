@@ -34,7 +34,6 @@ public class TreeManager : MonoBehaviour
     float actualLightRange;
     int wispsAscended;
 
-    ParticleSystemShapeType shape;
     // Use this for initialization
     void Start()
     {
