@@ -8,6 +8,8 @@ public class Followers : MonoBehaviour
     public int index;
 
     CameraDezoom cam;
+
+
     // Use this for initialization
     void Start ()
     {
@@ -46,7 +48,7 @@ public class Followers : MonoBehaviour
         }
         else
         {
-           // wisps[index] = null;
+            wisps[index] = null;
             index--;
         }
         cam.CameraZooming(-1);

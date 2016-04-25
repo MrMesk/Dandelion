@@ -18,6 +18,13 @@ public class WraithIA : MonoBehaviour
     public Material[] mats;
     [Space(10)]
     public GameObject particleDeath;
+    [Space(10)]
+    [FMODUnity.EventRef]
+    public string laughSound = "event:/Wraiths/Laugh";
+    [FMODUnity.EventRef]
+    public string explodeSound = "event:/Wraiths/Explode";
+    [FMODUnity.EventRef]
+    public string askSound = "event:/Wisps/Ask";
 
     Material[] materials;
     bool isFar = false;
@@ -49,12 +56,14 @@ public class WraithIA : MonoBehaviour
                 {
                     isFar = true;
                     StartCoroutine(Awaking());
+                    FMODUnity.RuntimeManager.PlayOneShot(askSound, transform.position);
                 }
             }
             else if (NearbyCheck(nearRange, 0))
             {
                 SetTarget(targetCheck);
                 isNearby = true;
+                FMODUnity.RuntimeManager.PlayOneShot(laughSound, transform.position);
             }
         }
         if (targetSet)
@@ -116,6 +125,7 @@ public class WraithIA : MonoBehaviour
                 isNearby = true;
                 isFar = true;
                 SetTarget(targetCheck);
+                FMODUnity.RuntimeManager.PlayOneShot(laughSound, transform.position);
             }
             else
             {
@@ -130,6 +140,7 @@ public class WraithIA : MonoBehaviour
     public void Death()
     {
         Instantiate(particleDeath, transform.position, Quaternion.identity);
+        FMODUnity.RuntimeManager.PlayOneShot(explodeSound, transform.position);
         Destroy(gameObject);
     }
 

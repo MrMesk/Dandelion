@@ -25,12 +25,22 @@ public class WispIA : MonoBehaviour
     [Space(10)]
     public GameObject particleDeath;
 
+    [FMODUnity.EventRef]
+    public string askSound = "event:/Wisps/Ask";
+    [FMODUnity.EventRef]
+    public string joinSound = "event:/Wisps/Join";
+    [FMODUnity.EventRef]
+    public string ascendSound = "event:/Wisps/Ascend";
+    [FMODUnity.EventRef]
+    public string deathSound = "event:/Wisps/Death";
+
     Followers follow;
 
     bool isFar = false;
     bool isNearby = false;
     bool targetSet = false;
     bool isLighting = false;
+    bool isAscending = false;
 
     Material[] materials;
     Animator anim;
@@ -63,11 +73,13 @@ public class WispIA : MonoBehaviour
                if(NearbyCheck(farRange, 1))
                {
                     isFar = true;
+                    FMODUnity.RuntimeManager.PlayOneShot(askSound, transform.position);
                     StartCoroutine(Awaking());
                }
             }
             else if(NearbyCheck(nearRange, 0))
             {
+                FMODUnity.RuntimeManager.PlayOneShot(joinSound, transform.position);
                 SetTarget(follow.AddFollower(gameObject));
                 isNearby = true;
             }   
@@ -95,6 +107,7 @@ public class WispIA : MonoBehaviour
 
     public void SetTarget(Transform t)
     {
+       
         target = t;
         targetSet = true;
         l.enabled = true;
@@ -163,6 +176,7 @@ public class WispIA : MonoBehaviour
                 isNearby = true;
                 isFar = true;
                 SetTarget(follow.AddFollower(gameObject));
+                FMODUnity.RuntimeManager.PlayOneShot(joinSound, transform.position);
             }
             else
             {
@@ -175,12 +189,24 @@ public class WispIA : MonoBehaviour
     }
     public void Death()
     {
-        if(!isLighting)
+        
+        if (isLighting)
+        {
+            Instantiate(particleDeath, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+        else
         {
             follow.KillFollower(followIndex);
-        } 
-        Instantiate(particleDeath, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+            if (!isAscending)
+            {
+                FMODUnity.RuntimeManager.PlayOneShot(deathSound, transform.position);
+                Instantiate(particleDeath, transform.position, Quaternion.identity);
+            }
+            
+            Destroy(gameObject);
+        }
+        
     }
 
     public void ClearFollowers()
@@ -191,18 +217,31 @@ public class WispIA : MonoBehaviour
 
     public void Ascend(Transform t)
     {
-        SetTarget(t);
-        if(!isNearby && !isFar)
+        if(!isAscending)
+        {
+            SetTarget(t);
+            FMODUnity.RuntimeManager.PlayOneShot(joinSound, transform.position);
+            if (!isNearby && !isFar)
+            {
+                isNearby = true;
+                isFar = true;
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraDezoom>().CameraZooming(1);
+            }
+            isAscending = true;
+        }
+        else
         {
             isNearby = true;
             isFar = true;
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraDezoom>().CameraZooming(1);
+            SetTarget(t);
         }
+       
 
     }
 
     public void GoToLocation(Transform pos)
     {
+        FMODUnity.RuntimeManager.PlayOneShot(joinSound, transform.position);
         follow.KillFollower(followIndex);
         isLighting = true;
         target = pos;
@@ -213,6 +252,7 @@ public class WispIA : MonoBehaviour
     {
         if(other.tag == "Tree")
         {
+            FMODUnity.RuntimeManager.PlayOneShot(ascendSound, transform.position);
             other.GetComponent<TreeManager>().AscendWisp();
             Death();
         }
