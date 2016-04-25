@@ -68,16 +68,13 @@ public class Followers : MonoBehaviour
         index = 0;
         transform.position = spawnPoint;
     }
-    public void PlayerKill2()
+
+    public IEnumerator BreakChain(int i)
     {
-        if(index > 0)
+        while(i <= index)
         {
-            wisps[index].GetComponent<WispIA>().Death();
-        }
-        else
-        {
-            index = 0;
-            transform.position = spawnPoint;
+            wisps[i].GetComponent<WispIA>().Death();
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

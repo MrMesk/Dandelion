@@ -21,8 +21,12 @@ public class TreeManager : MonoBehaviour
     public GameObject particleChild;
     [Space(10)]
     public GameObject fog;
+    [Space(10)]
+    public GameObject ascendedWisps;
 
-    ParticleSystem.ShapeModule shapeModule;
+    ParticleSystem.ShapeModule shapeModuleFog;
+    ParticleSystem.ShapeModule shapeModuleWisp;
+
     bool step2Reached = false;
 
     float actualAggroRange;
@@ -40,13 +44,14 @@ public class TreeManager : MonoBehaviour
         actualLightRange = lightChild.GetComponent<Light>().range;
         wispsAscended = 0;
 
-        shapeModule = fog.GetComponent<ParticleSystem>().shape;
+        shapeModuleFog = fog.GetComponent<ParticleSystem>().shape;
+        shapeModuleWisp = ascendedWisps.GetComponent<ParticleSystem>().shape;
 
 
         actualAggroRange = aggroRange;
         newAggroRange = actualAggroRange;
 
-        actualParticleRange = shapeModule.radius;
+        actualParticleRange = shapeModuleFog.radius;
         newParticleRange = actualParticleRange;
     }
 
@@ -100,6 +105,7 @@ public class TreeManager : MonoBehaviour
         lightChild.GetComponent<Light>().range = Mathf.Lerp(lightChild.GetComponent<Light>().range, actualLightRange, LightIncreaseSpeed * Time.deltaTime);
         actualAggroRange = Mathf.Lerp(actualAggroRange, newAggroRange, LightIncreaseSpeed * Time.deltaTime);
         actualParticleRange = Mathf.Lerp(actualParticleRange, newParticleRange, LightIncreaseSpeed * Time.deltaTime);
-        shapeModule.radius = actualParticleRange;
+        shapeModuleFog.radius = actualParticleRange;
+        shapeModuleWisp.radius = actualParticleRange;
     }
 }

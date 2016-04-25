@@ -47,21 +47,24 @@ public class WispIA : MonoBehaviour
     int followIndex;
     Light l;
 
-    MeshRenderer my_Renderer;
+    SkinnedMeshRenderer my_Renderer;
 
     Transform target;
+    Vector3 lookDir;
 
 	// Use this for initialization
 	void Start ()
     {
         l = transform.Find("Light").GetComponent<Light>();
         follow = GameObject.FindGameObjectWithTag("Player").GetComponent<Followers>();
-        my_Renderer = transform.Find("Model").GetComponent<MeshRenderer>();
+        my_Renderer = transform.Find("Model").GetComponent<SkinnedMeshRenderer>();
         materials = my_Renderer.materials;
         materials[0] = mats[2];
+        materials[3] = mats[2];
         my_Renderer.materials = materials;
-        anim = transform.Find("Model").GetComponent<Animator>();
-	}
+        // anim = transform.Find("Model").GetComponent<Animator>();
+        anim = GetComponent<Animator>();
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -98,6 +101,7 @@ public class WispIA : MonoBehaviour
             if(c.transform.tag == "Player")
             {
                 materials[0] = mats[matID];
+                materials[3] = mats[matID];
                 my_Renderer.materials = materials;
                 return true;
             }
@@ -123,6 +127,9 @@ public class WispIA : MonoBehaviour
     {
         if(target)
         {
+            lookDir = target.position - transform.position;
+            lookDir.y = 0f;
+            transform.right = lookDir.normalized;
             if (!isLighting)
             {
                 if (Vector3.Distance(transform.position, target.position) > spacing)
@@ -142,7 +149,7 @@ public class WispIA : MonoBehaviour
             }
             else
             {
-                if (Vector3.Distance(transform.position, target.position) > 0f)
+                if (Vector3.Distance(transform.position, target.position) > 0.1f)
                 {
                     transform.position = Vector3.Lerp(transform.position, target.position, speed * Time.deltaTime);
                     if (anim.GetBool("Moving") == false)
@@ -181,6 +188,7 @@ public class WispIA : MonoBehaviour
             else
             {
                 materials[0] = mats[2];
+                materials[3] = mats[2];
                 my_Renderer.materials = materials;
                 isFar = false;
                 isNearby = false;
@@ -188,8 +196,7 @@ public class WispIA : MonoBehaviour
         }
     }
     public void Death()
-    {
-        
+    {   
         if (isLighting)
         {
             Instantiate(particleDeath, transform.position, Quaternion.identity);
@@ -206,9 +213,19 @@ public class WispIA : MonoBehaviour
             
             Destroy(gameObject);
         }
-        
     }
-
+    public void BreakFollowers()
+    {
+        if(isLighting)
+        {
+            Instantiate(particleDeath, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+        else
+        {
+            follow.StartCoroutine(follow.BreakChain(followIndex));
+        }
+    }
     public void ClearFollowers()
     {
         Instantiate(particleDeath, transform.position, Quaternion.identity);
@@ -265,7 +282,12 @@ public class WispIA : MonoBehaviour
             l.range = Mathf.Lerp(l.range, endGlow, speed * Time.deltaTime);
             yield return null;
         }
-       // Destroy(target.gameObject);
+        if (anim.GetBool("Moving") == true)
+        {
+            anim.SetTrigger("Stop");
+            anim.SetBool("Moving", false);
+        }
+        // Destroy(target.gameObject);
         yield return new WaitForSeconds(spotTime);
         while (l.range > 1.5f)
         {

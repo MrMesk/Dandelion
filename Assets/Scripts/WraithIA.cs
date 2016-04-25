@@ -153,7 +153,7 @@ public class WraithIA : MonoBehaviour
         }
         else if (other.tag == "Wisp")
         {
-            other.GetComponent<WispIA>().Death();
+            other.GetComponent<WispIA>().BreakFollowers();
             Death();
         }
     }
