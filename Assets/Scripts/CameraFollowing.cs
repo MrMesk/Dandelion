@@ -12,7 +12,7 @@ public class CameraFollowing : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Character");
+        //player = GameObject.Find("Character");
     }
 
     void FixedUpdate()
