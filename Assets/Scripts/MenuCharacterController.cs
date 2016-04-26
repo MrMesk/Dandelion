@@ -20,6 +20,17 @@ public class MenuCharacterController : MonoBehaviour
     {
         SwitchLevel(lvl1Pos);
     }
+
+    public void Level2()
+    {
+        SwitchLevel(lvl2Pos);
+    }
+
+    public void Level3()
+    {
+        SwitchLevel(lvl3Pos);
+    }
+
     public void SwitchLevel(Vector3 newPos)
     {
         nav.SetDestination(newPos);

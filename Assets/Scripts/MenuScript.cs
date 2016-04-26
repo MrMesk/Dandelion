@@ -47,18 +47,25 @@ public class MenuScript : MonoBehaviour
         optionsText.enabled = true;
         exitText.enabled = true;
     }
+
+    public void BackToMenu()
+    {
+        startText.enabled = true;
+        optionsText.enabled = true;
+        exitText.enabled = true;
+    }
     public void ExitGame()
     {
         Application.Quit();
     }
-    public void StartLevel()
-    {
-
-    }
 
     public void StartTextFadeOutPress()
     {
-        for(int i = 0; i< StartTexts.Length; i++)
+        startText.enabled = false;
+        optionsText.enabled = false;
+        exitText.enabled = false;
+
+        for (int i = 0; i< StartTexts.Length; i++)
         {
             StartCoroutine(TextFadeOut(StartTexts[i]));
         }
