@@ -16,6 +16,12 @@ public class TreeManager : MonoBehaviour
     [Range(10, 20)]
     public int step1;
     [Space(10)]
+    [Range(0, 1)]
+    public float growSpeed;
+    [Space(10)]
+    [Range(0, 720)]
+    public float rotateSpeed;
+    [Space(10)]
     public GameObject lightChild;
     [Space(10)]
     public GameObject particleChild;
@@ -23,6 +29,9 @@ public class TreeManager : MonoBehaviour
     public GameObject fog;
     [Space(10)]
     public GameObject ascendedWisps;
+    [Space(10)]
+    public GameObject dandelionSkin;
+
 
     ParticleSystem.ShapeModule shapeModuleFog;
     ParticleSystem.ShapeModule shapeModuleWisp;
@@ -37,10 +46,12 @@ public class TreeManager : MonoBehaviour
 
     float actualLightRange;
     int wispsAscended;
+    float growTime;
 
     // Use this for initialization
     void Start()
     {
+        growTime = 0f;
         actualLightRange = lightChild.GetComponent<Light>().range;
         wispsAscended = 0;
 
@@ -60,6 +71,16 @@ public class TreeManager : MonoBehaviour
     {
         NearCheck(actualAggroRange);
         UpdateLight();
+
+        if (growTime > 0f)
+        {
+            Grow();
+            growTime -= Time.deltaTime;
+        }
+        else
+        {
+            growTime = 0f;
+        }
     }
 
     void NearCheck(float range)
@@ -86,6 +107,7 @@ public class TreeManager : MonoBehaviour
     {
         wispsAscended++;
         SmoothLightIncrease();
+        growTime++;
         if (wispsAscended >= step1 && !step2Reached)
         {
             step2Reached = true;
@@ -107,5 +129,13 @@ public class TreeManager : MonoBehaviour
         actualParticleRange = Mathf.Lerp(actualParticleRange, newParticleRange, LightIncreaseSpeed * Time.deltaTime);
         shapeModuleFog.radius = actualParticleRange;
         shapeModuleWisp.radius = actualParticleRange;
+    }
+
+    void Grow()
+    {
+        Vector3 scale = dandelionSkin.transform.localScale;
+        scale += new Vector3(growSpeed, growSpeed, growSpeed) * Time.deltaTime;
+        dandelionSkin.transform.localScale = scale;
+        dandelionSkin.transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime);
     }
 }

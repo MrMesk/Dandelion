@@ -129,8 +129,9 @@ public class WraithIA : MonoBehaviour
             }
             else
             {
-                materials[0] = mats[2];
-                my_Renderer.materials = materials;
+                // materials[0] = mats[2];
+                // my_Renderer.materials = materials;
+                wakingTime = wakingTime * 2 / 3;
                 isFar = false;
                 isNearby = false;
             }

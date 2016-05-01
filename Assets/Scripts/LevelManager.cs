@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     public Canvas level2Menu;
     public Canvas level3Menu;
     public Canvas backToMenu;
+
     // Use this for initialization
     void Start ()
     {
