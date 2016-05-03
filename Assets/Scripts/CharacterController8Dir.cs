@@ -31,6 +31,11 @@ public class CharacterController8Dir : MonoBehaviour
             dir += Vector3.right * hAxis;
             facingDir = dir;
         }
+
+    }
+
+    void FixedUpdate()
+    {
         dir = dir.normalized * speed * Time.deltaTime;
         rigid.velocity = dir;
         transform.forward = facingDir;
