@@ -136,6 +136,7 @@ public class WispIA : MonoBehaviour
         target = t;
         targetSet = true;
         l.enabled = true;
+        l.range = maxLightRange;
         tag = "Wisp";
     }
 
