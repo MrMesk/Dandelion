@@ -55,11 +55,13 @@ public class WispIA : MonoBehaviour
     Vector3 lookDir;
 
     float lightIncr;
+    float actualLightRange;
 
     // Use this for initialization
     void Start ()
     {
         lightIncr = 0f;
+        actualLightRange = 0f;
         l = transform.Find("Light").GetComponent<Light>();
         follow = GameObject.FindGameObjectWithTag("Player").GetComponent<Followers>();
         my_Renderer = transform.Find("Model").GetComponent<SkinnedMeshRenderer>();
@@ -77,6 +79,12 @@ public class WispIA : MonoBehaviour
         if (isFar && !isNearby)
         {
             LightAwake();
+            if (!NearbyCheck(farRange, 1))
+            {
+                lightIncr = 0f;
+                actualLightRange = l.range;
+                isFar = false;
+            }
         }
         else if (!isFar && !isNearby)
         {
@@ -206,7 +214,7 @@ public class WispIA : MonoBehaviour
         if (l.range > 0f)
         {
             lightIncr += Time.deltaTime / (wakingTime);
-            l.range = Mathf.Lerp(maxLightRange, 0f, lightIncr);
+            l.range = Mathf.Lerp(actualLightRange, 0f, lightIncr);
         }
         else
         {
@@ -228,9 +236,12 @@ public class WispIA : MonoBehaviour
             }
             else
             {
-                materials[0] = mats[2];
-                materials[3] = mats[2];
-                my_Renderer.materials = materials;
+                // materials[0] = mats[2];
+                // materials[3] = mats[2];
+                // my_Renderer.materials = materials;
+                wakingTime = wakingTime * 2 / 3;
+                actualLightRange = l.range;
+                lightIncr = 0f;
                 isFar = false;
                 isNearby = false;
             }

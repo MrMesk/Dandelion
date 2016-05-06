@@ -31,7 +31,7 @@ public class Followers : MonoBehaviour
             {
                 wisps[i] = wisps[i - 1];
                 wisps[i].GetComponent<WispIA>().SetIndex(i);
-                Debug.Log("Moved wisp from " + i + " to " + (i + 1));
+               // Debug.Log("Moved wisp from " + i + " to " + (i + 1));
             }
             wisps[1] = g;
             g.GetComponent<WispIA>().SetIndex(1);

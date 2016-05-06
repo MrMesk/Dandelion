@@ -40,11 +40,13 @@ public class WraithIA : MonoBehaviour
 
     Light l;
     float lightIncr;
+    float actualLightRange;
 
     // Use this for initialization
     void Start ()
     {
         lightIncr = 0f;
+        actualLightRange = 0f;
         l = transform.Find("Light").GetComponent<Light>();
         my_Renderer = transform.Find("Model").GetComponent<MeshRenderer>();
         materials = my_Renderer.materials;
@@ -58,6 +60,12 @@ public class WraithIA : MonoBehaviour
         if(isFar && !isNearby)
         {
             LightAwake();
+            if (!NearbyCheck(farRange, 1))
+            {
+                lightIncr = 0f;
+                actualLightRange = l.range;
+                isFar = false;
+            }
         }
         else if (!isFar && !isNearby)
         {
@@ -151,7 +159,7 @@ public class WraithIA : MonoBehaviour
         if (l.range > 0f)
         {
             lightIncr += Time.deltaTime / (wakingTime);
-            l.range = Mathf.Lerp(maxLightRange, 0f, lightIncr);
+            l.range = Mathf.Lerp(actualLightRange, 0f, lightIncr);
         }
         else
         {
@@ -176,6 +184,7 @@ public class WraithIA : MonoBehaviour
                 // materials[0] = mats[2];
                 // my_Renderer.materials = materials;
                 wakingTime = wakingTime * 2 / 3;
+                actualLightRange = l.range;
                 lightIncr = 0f;
                 isFar = false;
                 isNearby = false;
