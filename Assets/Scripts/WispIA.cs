@@ -18,6 +18,8 @@ public class WispIA : MonoBehaviour
     public float spotTime;
     [Range(5f, 10f)]
     public float endGlow;
+    [Range(0f, 10f)]
+    public float maxLightRange;
     [Space(10)]
     public LayerMask aggroLayer;
     [Space(10)]
@@ -52,9 +54,12 @@ public class WispIA : MonoBehaviour
     Transform target;
     Vector3 lookDir;
 
-	// Use this for initialization
-	void Start ()
+    float lightIncr;
+
+    // Use this for initialization
+    void Start ()
     {
+        lightIncr = 0f;
         l = transform.Find("Light").GetComponent<Light>();
         follow = GameObject.FindGameObjectWithTag("Player").GetComponent<Followers>();
         my_Renderer = transform.Find("Model").GetComponent<SkinnedMeshRenderer>();
@@ -68,8 +73,16 @@ public class WispIA : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update ()
-    {   
-	    if(!isNearby)
+    {
+        if (isFar && !isNearby)
+        {
+            LightAwake();
+        }
+        else if (!isFar && !isNearby)
+        {
+            LightSleep();
+        }
+        if (!isNearby)
         {
             if(!isFar)
             {
@@ -172,7 +185,35 @@ public class WispIA : MonoBehaviour
             target = follow.GetFollowing(followIndex);
         }
     }
+    public void LightAwake()
+    {
 
+        if (l.range < maxLightRange)
+        {
+            lightIncr += Time.deltaTime / (wakingTime);
+            l.range = Mathf.Lerp(2f, maxLightRange, lightIncr);
+        }
+        else
+        {
+            lightIncr = 0f;
+            l.range = maxLightRange;
+        }
+    }
+
+    public void LightSleep()
+    {
+
+        if (l.range > 0f)
+        {
+            lightIncr += Time.deltaTime / (wakingTime);
+            l.range = Mathf.Lerp(maxLightRange, 0f, lightIncr);
+        }
+        else
+        {
+            l.range = 0f;
+            lightIncr = 0f;
+        }
+    }
     IEnumerator Awaking()
     {
         yield return new WaitForSeconds(wakingTime);

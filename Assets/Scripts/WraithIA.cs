@@ -12,6 +12,8 @@ public class WraithIA : MonoBehaviour
     public float speed;
     [Range(0.5f, 2f)]
     public float wakingTime;
+    [Range(0f, 10f)]
+    public float maxLightRange;
     [Space(10)]
     public LayerMask aggroLayer;
     [Space(10)]
@@ -36,9 +38,14 @@ public class WraithIA : MonoBehaviour
     Transform target;
     Transform targetCheck;
 
+    Light l;
+    float lightIncr;
+
     // Use this for initialization
     void Start ()
     {
+        lightIncr = 0f;
+        l = transform.Find("Light").GetComponent<Light>();
         my_Renderer = transform.Find("Model").GetComponent<MeshRenderer>();
         materials = my_Renderer.materials;
         materials[0] = mats[2];
@@ -48,6 +55,14 @@ public class WraithIA : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if(isFar && !isNearby)
+        {
+            LightAwake();
+        }
+        else if (!isFar && !isNearby)
+        {
+            LightSleep();
+        }
         if (!isNearby)
         {
             if (!isFar)
@@ -91,6 +106,7 @@ public class WraithIA : MonoBehaviour
 
     public void SetTarget(Transform t)
     {
+        l.range = maxLightRange;
         target = t;
         targetSet = true;
     }
@@ -114,7 +130,35 @@ public class WraithIA : MonoBehaviour
             my_Renderer.materials = materials;
         }
     }
+    public void LightAwake()
+    {
+       
+        if (l.range < maxLightRange)
+        {
+            lightIncr += Time.deltaTime / (wakingTime);
+            l.range = Mathf.Lerp(2f, maxLightRange, lightIncr);
+        }
+        else
+        {
+            lightIncr = 0f;
+            l.range = maxLightRange;
+        }
+    }
 
+    public void LightSleep()
+    {
+       
+        if (l.range > 0f)
+        {
+            lightIncr += Time.deltaTime / (wakingTime);
+            l.range = Mathf.Lerp(maxLightRange, 0f, lightIncr);
+        }
+        else
+        {
+            l.range = 0f;
+            lightIncr = 0f;
+        }
+    }
     IEnumerator Awaking()
     {
         yield return new WaitForSeconds(wakingTime);
@@ -132,6 +176,7 @@ public class WraithIA : MonoBehaviour
                 // materials[0] = mats[2];
                 // my_Renderer.materials = materials;
                 wakingTime = wakingTime * 2 / 3;
+                lightIncr = 0f;
                 isFar = false;
                 isNearby = false;
             }
