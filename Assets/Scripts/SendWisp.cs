@@ -21,7 +21,7 @@ public class SendWisp : MonoBehaviour
             {
                 if(follow.index > 0)
                 {
-                    Vector3 destination = new Vector3(hit.point.x, hit.point.y + 1f, hit.point.z);
+                    Vector3 destination = new Vector3(hit.point.x, 1f, hit.point.z);
                     GameObject destinationFeedback = Instantiate(Resources.Load("Feedbacks/Destination") as GameObject, destination, Quaternion.identity) as GameObject;
                     follow.wisps[1].GetComponent<WispIA>().GoToLocation(destinationFeedback.transform);
                 }

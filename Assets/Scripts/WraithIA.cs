@@ -10,7 +10,7 @@ public class WraithIA : MonoBehaviour
     public float farRange;
     [Range(0.5f, 100f)]
     public float speed;
-    [Range(0.5f, 2f)]
+    [Range(0.5f, 5f)]
     public float wakingTime;
     [Range(0f, 10f)]
     public float maxLightRange;

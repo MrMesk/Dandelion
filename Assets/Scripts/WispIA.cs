@@ -12,7 +12,7 @@ public class WispIA : MonoBehaviour
     public float spacing;
     [Range(0.5f, 2f)]
     public float speed;
-    [Range(0.5f, 2f)]
+    [Range(0.5f, 5f)]
     public float wakingTime;
     [Range(2f, 10f)]
     public float spotTime;

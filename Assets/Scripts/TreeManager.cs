@@ -31,6 +31,8 @@ public class TreeManager : MonoBehaviour
     public GameObject ascendedWisps;
     [Space(10)]
     public GameObject dandelionSkin;
+    [Space(10)]
+    public GameObject particleAscend;
 
 
     ParticleSystem.ShapeModule shapeModuleFog;
@@ -108,6 +110,7 @@ public class TreeManager : MonoBehaviour
         wispsAscended++;
         SmoothLightIncrease();
         growTime++;
+        Instantiate(particleAscend, particleChild.transform.position, Quaternion.identity);
         if (wispsAscended >= step1 && !step2Reached)
         {
             step2Reached = true;
