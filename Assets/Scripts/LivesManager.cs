@@ -9,6 +9,8 @@ public class LivesManager : MonoBehaviour
     public int lives = 2;
     public int actualLives;
     public GameObject[] livesObjects;
+    public Canvas gameOverCanvas;
+    public GameObject player;
 	// Use this for initialization
 
     void Awake()
@@ -18,6 +20,7 @@ public class LivesManager : MonoBehaviour
 
 	void Start ()
     {
+        gameOverCanvas.enabled = false;
         actualLives = lives;
         livesObjects[0].SetActive(true);
         livesObjects[1].SetActive(true);
@@ -94,6 +97,8 @@ public class LivesManager : MonoBehaviour
 
     void GameOver()
     {
-
+        gameOverCanvas.enabled = true;
+        player.GetComponent<MeshRenderer>().enabled = false;
+        player.GetComponent<CharacterController8Dir>().enabled = false;
     }
 }

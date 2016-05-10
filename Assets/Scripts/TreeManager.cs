@@ -96,6 +96,12 @@ public class TreeManager : MonoBehaviour
         if(Input.GetButtonUp("Submit") && endReached)
         {
             SceneManager.LoadScene(0);
+
+            if (DataManagement.data.topScore[DataManagement.data.levelNumber] < LivesManager.livesManager.actualLives)
+            {
+                DataManagement.data.topScore[DataManagement.data.levelNumber] = LivesManager.livesManager.actualLives;
+                DataManagement.data.Save();
+            }
         }
     }
 
