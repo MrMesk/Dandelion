@@ -27,12 +27,14 @@ public class DataManagement : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Load();
     }
 
     public void Save()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/gameInfo.dat", FileMode.Open);
+        FileStream file = File.Create(Application.persistentDataPath + "/gameInfo.dat");
 
         GameData data = new GameData();
         data.savedDandelions = savedDandelions;

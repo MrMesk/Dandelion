@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
 
 public class Followers : MonoBehaviour
 {

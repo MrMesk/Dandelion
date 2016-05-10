@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine.SceneManagement;
 
 public class TreeManager : MonoBehaviour
 {
@@ -17,6 +17,9 @@ public class TreeManager : MonoBehaviour
     [Space(10)]
     [Range(10, 20)]
     public int step1;
+    [Space(10)]
+    [Range(5, 70)]
+    public int minWispsToWin;
     [Space(10)]
     [Range(0, 1)]
     public float growSpeed;
@@ -35,12 +38,15 @@ public class TreeManager : MonoBehaviour
     public GameObject dandelionSkin;
     [Space(10)]
     public GameObject particleAscend;
+    [Space(10)]
+    public Canvas winMenu;
 
 
     ParticleSystem.ShapeModule shapeModuleFog;
     ParticleSystem.ShapeModule shapeModuleWisp;
 
-    bool step2Reached = false;
+    bool step1Reached = false;
+    bool endReached = false;
 
     float actualAggroRange;
     float newAggroRange;
@@ -55,6 +61,7 @@ public class TreeManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        winMenu.enabled = false;
         growTime = 0f;
         actualLightRange = lightChild.GetComponent<Light>().range;
         wispsAscended = 0;
@@ -85,6 +92,11 @@ public class TreeManager : MonoBehaviour
         {
             growTime = 0f;
         }
+
+        if(Input.GetButtonUp("Submit") && endReached)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     void NearCheck(float range)
@@ -113,10 +125,21 @@ public class TreeManager : MonoBehaviour
         SmoothLightIncrease();
         growTime++;
         Instantiate(particleAscend, particleChild.transform.position, Quaternion.identity);
-        if (wispsAscended >= step1 && !step2Reached)
+        if (wispsAscended >= step1 && !step1Reached)
         {
-            step2Reached = true;
+            step1Reached = true;
             particleChild.SetActive(true);
+        }
+
+        if(wispsAscended >= minWispsToWin && endReached == false)
+        {
+            LevelEnd();
+        }
+
+        if(DataManagement.data.savedDandelions[DataManagement.data.levelNumber] < wispsAscended)
+        {
+            DataManagement.data.savedDandelions[DataManagement.data.levelNumber] = wispsAscended;
+            DataManagement.data.Save();
         }
 
     }
@@ -144,5 +167,26 @@ public class TreeManager : MonoBehaviour
         dandelionSkin.transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime);
     }
 
+    void LevelEnd()
+    {
+        switch(DataManagement.data.levelNumber)
+        {
+            case 0:
+                DataManagement.data.levelUnlocked[0] = true;
+                DataManagement.data.Save();
+                break;
 
+            case 1:
+                DataManagement.data.levelUnlocked[1] = true;
+                DataManagement.data.Save();
+                break;
+
+            case 2:
+                DataManagement.data.levelUnlocked[2] = true;
+                DataManagement.data.Save();
+                break;
+        }
+        winMenu.enabled = true;
+        endReached = true;
+    }
 }

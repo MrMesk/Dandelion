@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     public Canvas level3Menu;
     public Canvas backToMenu;
 
+    public Text[] amountSaved;
     // Use this for initialization
     void Start ()
     {
@@ -21,6 +22,10 @@ public class LevelManager : MonoBehaviour
         level2Menu.enabled = false;
         level3Menu.enabled = false;
         backToMenu.enabled = false;
+
+        amountSaved[0].text = DataManagement.data.savedDandelions[0].ToString() + " / 73";
+        amountSaved[1].text = DataManagement.data.savedDandelions[1].ToString() + " / 73";
+        amountSaved[2].text = DataManagement.data.savedDandelions[2].ToString() + " / 73";
     }
 
     public void Lvl1()

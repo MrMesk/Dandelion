@@ -203,7 +203,8 @@ public class WraithIA : MonoBehaviour
     {
         if(other.tag =="Player")
         {
-            other.GetComponent<Followers>().PlayerKill();
+            //other.GetComponent<Followers>().PlayerKill();
+            LivesManager.livesManager.LifeCHange(-1);
             Death();
         }
         else if (other.tag == "Wisp")
