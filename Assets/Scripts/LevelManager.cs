@@ -11,6 +11,10 @@ public class LevelManager : MonoBehaviour
     public Canvas backToMenu;
 
     public Text[] amountSaved;
+
+    public Text[] biggestChain;
+
+    public Text[] soulsRemaining;
     // Use this for initialization
     void Start ()
     {
@@ -24,8 +28,14 @@ public class LevelManager : MonoBehaviour
         backToMenu.enabled = false;
 
         amountSaved[0].text = DataManagement.data.savedDandelions[0].ToString() + " / 73";
-        amountSaved[1].text = DataManagement.data.savedDandelions[1].ToString() + " / 73";
-        amountSaved[2].text = DataManagement.data.savedDandelions[2].ToString() + " / 73";
+        amountSaved[1].text = DataManagement.data.savedDandelions[1].ToString() + " / 80";
+        amountSaved[2].text = DataManagement.data.savedDandelions[2].ToString() + " / 65";
+
+        for(int i = 0; i< 3; i++)
+        {
+            biggestChain[i].text = DataManagement.data.biggestFollowerAmount[i].ToString();
+            soulsRemaining[i].text = DataManagement.data.topScore[i].ToString();
+        }
     }
 
     public void Lvl1()
