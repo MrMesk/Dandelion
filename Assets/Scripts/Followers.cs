@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class Followers : MonoBehaviour
 {
@@ -25,6 +27,10 @@ public class Followers : MonoBehaviour
         // if (index < wisps.Length)
         // {
         index++;
+        if(DataManagement.data.biggestFollowerAmount[DataManagement.data.levelNumber] < index)
+        {
+            DataManagement.data.biggestFollowerAmount[DataManagement.data.levelNumber] = index;
+        }
         if (index > 1)
         {
             for (int i = index; i > 1; i--)

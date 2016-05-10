@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class TreeManager : MonoBehaviour
 {
@@ -50,12 +52,9 @@ public class TreeManager : MonoBehaviour
     int wispsAscended;
     float growTime;
 
-    DataManagement data;
-
     // Use this for initialization
     void Start()
     {
-        data = GameObject.FindGameObjectWithTag("GameController").GetComponent<DataManagement>();
         growTime = 0f;
         actualLightRange = lightChild.GetComponent<Light>().range;
         wispsAscended = 0;
@@ -144,5 +143,6 @@ public class TreeManager : MonoBehaviour
         dandelionSkin.transform.localScale = scale;
         dandelionSkin.transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime);
     }
+
 
 }
