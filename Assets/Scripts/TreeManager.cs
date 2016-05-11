@@ -63,7 +63,7 @@ public class TreeManager : MonoBehaviour
     {
         winMenu.enabled = false;
         growTime = 0f;
-        actualLightRange = lightChild.GetComponent<Light>().range;
+        actualLightRange = lightChild.GetComponent<Light>().spotAngle;
         wispsAscended = 0;
 
         shapeModuleFog = fog.GetComponent<ParticleSystem>().shape;
@@ -152,13 +152,13 @@ public class TreeManager : MonoBehaviour
 
     public void SmoothLightIncrease()
     {
-        actualLightRange += lightIncreasePerWisp;
+        actualLightRange += lightIncreasePerWisp * 3f;
         newAggroRange += lightIncreasePerWisp;
         newParticleRange += lightIncreasePerWisp;
     }
     void UpdateLight()
     {
-        lightChild.GetComponent<Light>().range = Mathf.Lerp(lightChild.GetComponent<Light>().range, actualLightRange, LightIncreaseSpeed * Time.deltaTime);
+        lightChild.GetComponent<Light>().spotAngle = Mathf.Lerp(lightChild.GetComponent<Light>().spotAngle, actualLightRange, LightIncreaseSpeed * Time.deltaTime);
         actualAggroRange = Mathf.Lerp(actualAggroRange, newAggroRange, LightIncreaseSpeed * Time.deltaTime);
         actualParticleRange = Mathf.Lerp(actualParticleRange, newParticleRange, LightIncreaseSpeed * Time.deltaTime);
         shapeModuleFog.radius = actualParticleRange;
